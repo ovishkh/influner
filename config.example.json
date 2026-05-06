@@ -1,0 +1,12 @@
+{
+  "database": {
+    "host": "YOUR_DB_HOST",
+    "user": "YOUR_DB_USER",
+    "password": "YOUR_DB_PASSWORD",
+    "database": "YOUR_DB_NAME"
+  },
+  "port": 8001,
+  "jwt": "GENERATED_BY_SETUP_WIZARD",
+  "backendUrl": "https://your-domain.com",
+  "frontendUrl": "https://your-domain.com"
+}

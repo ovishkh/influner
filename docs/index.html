@@ -1,0 +1,2734 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Influencer – Documentation</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --primary: #ffffff;
+        --primary-light: #1a1a1a;
+        --primary-mid: #e5e5e5;
+        --accent: #cccccc;
+        --success: #ffffff;
+        --danger: #ffffff;
+        --info: #ffffff;
+        --text-dark: #ffffff;
+        --text-body: #d4d4d4;
+        --text-muted: #a3a3a3;
+        --border: #2a2a2a;
+        --bg: #0a0a0a;
+        --bg-soft: #121212;
+        --bg-card: #161616;
+        --radius: 12px;
+        --radius-sm: 8px;
+        --shadow: 0 2px 16px rgba(0, 0, 0, 0.5);
+        --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.7);
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: var(--bg);
+        color: var(--text-body);
+        font-size: 15px;
+        line-height: 1.7;
+      }
+
+      .btn-whatsapp {
+        background: #25d366;
+        color: #000000;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        position: relative;
+      }
+
+      .btn-whatsapp:hover {
+        background: #1ebe5d;
+        opacity: 1;
+        transform: translateY(-1px);
+      }
+
+      .btn-save {
+        background: transparent;
+        color: var(--primary);
+        border: 1.5px solid var(--border);
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+      }
+
+      .btn-save:hover {
+        border-color: var(--primary);
+        background: var(--primary-light);
+      }
+
+      .ping-dot {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        width: 10px;
+        height: 10px;
+        background: #25d366;
+        border-radius: 50%;
+        border: 2px solid var(--bg-card);
+      }
+
+      .ping-dot::before {
+        content: "";
+        position: absolute;
+        top: -3px;
+        left: -3px;
+        width: 16px;
+        height: 16px;
+        background: rgba(37, 211, 102, 0.4);
+        border-radius: 50%;
+        animation: ping 1.4s ease-in-out infinite;
+      }
+
+      @keyframes ping {
+        0% {
+          transform: scale(0.8);
+          opacity: 1;
+        }
+        70% {
+          transform: scale(1.8);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(0.8);
+          opacity: 0;
+        }
+      }
+
+      .recommended-badge {
+        display: inline-block;
+        background: #25d366;
+        color: #000;
+        font-size: 10px;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 100px;
+        letter-spacing: 0.04em;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+      }
+
+      .support-card.recommended {
+        border-color: #25d366;
+        box-shadow:
+          0 0 0 1px rgba(37, 211, 102, 0.2),
+          0 4px 24px rgba(37, 211, 102, 0.08);
+      }
+
+      .support-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+      }
+
+      /* ── SIDEBAR ── */
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 270px;
+        height: 100vh;
+        background: var(--bg-card);
+        border-right: 1px solid var(--border);
+        overflow-y: auto;
+        z-index: 100;
+        padding-bottom: 40px;
+      }
+
+      .sidebar-logo {
+        padding: 28px 24px 20px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .sidebar-logo .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .logo-icon {
+        width: 36px;
+        height: 36px;
+        background: linear-gradient(135deg, #ffffff, #cccccc);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+      }
+
+      .logo-text {
+        font-size: 17px;
+        font-weight: 700;
+        color: var(--text-dark);
+      }
+
+      .logo-text span {
+        color: var(--accent);
+      }
+
+      .sidebar-version {
+        font-size: 11px;
+        color: var(--text-muted);
+        margin-top: 4px;
+        padding-left: 46px;
+      }
+
+      .sidebar-nav {
+        padding: 16px 0;
+      }
+
+      .nav-section-label {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--text-muted);
+        padding: 12px 24px 6px;
+      }
+
+      .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 24px;
+        color: var(--text-body);
+        text-decoration: none;
+        font-size: 13.5px;
+        font-weight: 500;
+        border-left: 3px solid transparent;
+        transition: all 0.18s;
+      }
+
+      .nav-item:hover {
+        background: var(--primary-light);
+        color: var(--primary);
+        border-left-color: var(--primary);
+      }
+
+      .nav-item.active {
+        background: var(--primary-light);
+        color: var(--primary);
+        border-left-color: var(--primary);
+      }
+
+      .nav-item .nav-icon {
+        font-size: 15px;
+        width: 18px;
+        text-align: center;
+      }
+
+      /* ── MAIN ── */
+      .main {
+        margin-left: 270px;
+        min-height: 100vh;
+      }
+
+      /* ── TOP HERO ── */
+      .hero {
+        background: linear-gradient(
+          135deg,
+          #000000 0%,
+          #1a1a1a 50%,
+          #0a0a0a 100%
+        );
+        padding: 72px 64px 64px;
+        position: relative;
+        overflow: hidden;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: -80px;
+        right: -80px;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.05) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #ffffff;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 5px 14px;
+        border-radius: 100px;
+        margin-bottom: 20px;
+        letter-spacing: 0.04em;
+      }
+
+      .hero h1 {
+        font-size: 42px;
+        font-weight: 800;
+        color: #ffffff;
+        line-height: 1.2;
+        margin-bottom: 16px;
+      }
+
+      .hero h1 span {
+        color: #cccccc;
+      }
+
+      .hero p {
+        font-size: 16px;
+        color: #d4d4d4;
+        max-width: 580px;
+        line-height: 1.7;
+        margin-bottom: 32px;
+      }
+
+      .hero-meta {
+        display: flex;
+        gap: 32px;
+        flex-wrap: wrap;
+      }
+
+      .hero-meta-item {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .hero-meta-item .label {
+        font-size: 11px;
+        color: #a3a3a3;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        font-weight: 600;
+      }
+
+      .hero-meta-item .value {
+        font-size: 14px;
+        color: #ffffff;
+        font-weight: 600;
+      }
+
+      /* ── CONTENT AREA ── */
+      .content {
+        padding: 56px 64px;
+        max-width: 900px;
+      }
+
+      /* ── SECTION ── */
+      .doc-section {
+        margin-bottom: 64px;
+      }
+
+      .section-anchor {
+        display: block;
+        height: 80px;
+        margin-top: -80px;
+        visibility: hidden;
+      }
+
+      .section-header {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 24px;
+        padding-bottom: 16px;
+        border-bottom: 2px solid var(--border);
+      }
+
+      .section-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: var(--radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        flex-shrink: 0;
+        background: var(--primary-light);
+      }
+
+      .section-header h2 {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--text-dark);
+      }
+
+      .section-number {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--bg);
+        background: var(--primary);
+        padding: 2px 9px;
+        border-radius: 100px;
+      }
+
+      /* ── CARDS ── */
+      .card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 24px 28px;
+        margin-bottom: 16px;
+        box-shadow: var(--shadow-card);
+      }
+
+      .card-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .card p {
+        color: var(--text-body);
+        font-size: 14px;
+      }
+
+      /* ── FEATURE GRID ── */
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        margin: 24px 0;
+      }
+
+      .feature-card {
+        background: var(--bg-soft);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 20px 22px;
+        transition: box-shadow 0.2s;
+      }
+
+      .feature-card:hover {
+        box-shadow: var(--shadow);
+        border-color: var(--primary);
+      }
+
+      .feature-card .f-icon {
+        font-size: 26px;
+        margin-bottom: 10px;
+        display: block;
+      }
+
+      .feature-card h4 {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 6px;
+      }
+
+      .feature-card p {
+        font-size: 13px;
+        color: var(--text-muted);
+        line-height: 1.6;
+      }
+
+      /* ── STEPS ── */
+      .steps {
+        margin: 20px 0;
+      }
+
+      .step {
+        display: flex;
+        gap: 18px;
+        margin-bottom: 24px;
+        position: relative;
+      }
+
+      .step:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        left: 19px;
+        top: 44px;
+        bottom: -8px;
+        width: 2px;
+        background: var(--border);
+      }
+
+      .step-num {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #ffffff, #cccccc);
+        color: #000000;
+        font-size: 14px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+      }
+
+      .step-body {
+        padding-top: 8px;
+      }
+
+      .step-body h4 {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 6px;
+      }
+
+      .step-body p {
+        font-size: 14px;
+        color: var(--text-body);
+      }
+
+      /* ── CODE BLOCK ── */
+      .code-block {
+        background: #000000;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 20px 24px;
+        margin: 16px 0;
+        position: relative;
+        overflow-x: auto;
+      }
+
+      .code-block pre {
+        font-family: "Courier New", monospace;
+        font-size: 13px;
+        color: #e5e5e5;
+        line-height: 1.7;
+      }
+
+      .code-block .code-label {
+        font-size: 11px;
+        font-weight: 600;
+        color: #a3a3a3;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 10px;
+      }
+
+      .code-comment {
+        color: #737373;
+      }
+      .code-key {
+        color: #d4d4d4;
+      }
+      .code-val {
+        color: #ffffff;
+      }
+      .code-url {
+        color: #cccccc;
+      }
+
+      /* ── CALLOUT ── */
+      .callout {
+        border-radius: var(--radius-sm);
+        padding: 16px 20px;
+        margin: 20px 0;
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        font-size: 14px;
+        background: var(--bg-soft);
+        border: 1px solid var(--border);
+        border-left: 4px solid var(--primary);
+      }
+
+      .callout-icon {
+        font-size: 18px;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+
+      .callout strong {
+        font-weight: 700;
+        display: block;
+        margin-bottom: 3px;
+        color: var(--text-dark);
+      }
+
+      /* ── TABLE ── */
+      .doc-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 14px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+      }
+
+      .doc-table th {
+        background: var(--bg-soft);
+        color: var(--text-dark);
+        font-weight: 700;
+        padding: 12px 16px;
+        text-align: left;
+        border-bottom: 2px solid var(--border);
+        font-size: 13px;
+      }
+
+      .doc-table td {
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--border);
+        color: var(--text-body);
+        vertical-align: top;
+      }
+
+      .doc-table tr:last-child td {
+        border-bottom: none;
+      }
+      .doc-table tr:hover td {
+        background: var(--bg-soft);
+      }
+
+      /* ── BADGE ── */
+      .badge {
+        display: inline-block;
+        padding: 2px 10px;
+        border-radius: 100px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+        background: var(--primary-light);
+        color: var(--primary);
+        border: 1px solid var(--border);
+      }
+
+      /* ── PRICING TABLE ── */
+      .pricing-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin: 24px 0;
+      }
+
+      .pricing-card {
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 24px 20px;
+        text-align: center;
+        position: relative;
+        background: var(--bg-card);
+        transition: all 0.3s;
+      }
+
+      .pricing-card:hover {
+        border-color: var(--primary);
+        box-shadow: var(--shadow);
+      }
+
+      .pricing-card.popular {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+      }
+
+      .popular-badge {
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg, #ffffff, #cccccc);
+        color: #000000;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 3px 14px;
+        border-radius: 100px;
+        white-space: nowrap;
+      }
+
+      .pricing-card .plan-name {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 8px;
+      }
+
+      .pricing-card .plan-price {
+        font-size: 32px;
+        font-weight: 800;
+        color: var(--text-dark);
+        margin-bottom: 4px;
+      }
+
+      .pricing-card .plan-price span {
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--text-muted);
+      }
+
+      .pricing-card .plan-was {
+        font-size: 12px;
+        color: var(--text-muted);
+        text-decoration: line-through;
+        margin-bottom: 16px;
+      }
+
+      .pricing-card ul {
+        list-style: none;
+        text-align: left;
+        margin-bottom: 0;
+      }
+
+      .pricing-card ul li {
+        font-size: 13px;
+        color: var(--text-body);
+        padding: 5px 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .pricing-card ul li::before {
+        content: "✓";
+        color: var(--success);
+        font-weight: 700;
+        font-size: 13px;
+      }
+
+      /* ── MENU SECTION ── */
+      .menu-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        margin: 20px 0;
+      }
+
+      .menu-card {
+        background: var(--bg-soft);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 18px 20px;
+      }
+
+      .menu-card h4 {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .menu-card ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      .menu-card ul li {
+        font-size: 13px;
+        color: var(--text-body);
+        padding: 4px 0;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .menu-card ul li:last-child {
+        border-bottom: none;
+      }
+
+      .menu-card ul li::before {
+        content: "›";
+        color: var(--primary);
+        font-weight: 700;
+      }
+
+      .menu-card ul li.sub {
+        padding-left: 16px;
+        font-size: 12.5px;
+        color: var(--text-muted);
+      }
+
+      .menu-card ul li.sub::before {
+        content: "–";
+        color: var(--text-muted);
+      }
+
+      /* ── VIDEO EMBED ── */
+      .video-container {
+        position: relative;
+        padding-bottom: 56.25%;
+        height: 0;
+        overflow: hidden;
+        border-radius: var(--radius);
+        margin: 24px 0;
+        box-shadow: var(--shadow-card);
+        border: 1px solid var(--border);
+        background: var(--bg-card);
+      }
+
+      .video-placeholder {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+        transition: all 0.3s ease;
+      }
+
+      .video-placeholder:hover {
+        background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+      }
+
+      .video-play-button {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #ffffff, #cccccc);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        color: #000000;
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
+      }
+
+      .video-placeholder:hover .video-play-button {
+        transform: scale(1.1);
+        box-shadow: 0 6px 30px rgba(255, 255, 255, 0.3);
+      }
+
+      .video-info {
+        text-align: center;
+        padding: 0 20px;
+      }
+
+      .video-info h3 {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 8px;
+      }
+
+      .video-info p {
+        font-size: 14px;
+        color: var(--text-muted);
+      }
+
+      .video-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+
+      /* ── SUPPORT CARD ── */
+      .support-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        margin: 24px 0;
+      }
+
+      .support-card {
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 24px;
+        text-align: center;
+        background: var(--bg-card);
+        transition: box-shadow 0.2s;
+      }
+
+      .support-card:hover {
+        box-shadow: var(--shadow);
+        border-color: var(--primary);
+      }
+
+      .support-card .s-icon {
+        font-size: 32px;
+        margin-bottom: 12px;
+        display: block;
+      }
+
+      .support-card h4 {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 6px;
+      }
+
+      .support-card p {
+        font-size: 13px;
+        color: var(--text-muted);
+        margin-bottom: 14px;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 9px 20px;
+        border-radius: var(--radius-sm);
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.18s;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #ffffff, #cccccc);
+        color: #000000;
+      }
+
+      .btn-primary:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+      }
+
+      .btn-outline {
+        border: 1.5px solid var(--primary);
+        color: var(--primary);
+        background: transparent;
+      }
+
+      .btn-outline:hover {
+        background: var(--primary-light);
+      }
+
+      .btn-green {
+        background: var(--primary);
+        color: #000000;
+      }
+
+      .btn-green:hover {
+        opacity: 0.9;
+      }
+
+      /* ── CHANGELOG ── */
+      .changelog-item {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 20px;
+      }
+
+      .changelog-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--primary);
+        margin-top: 6px;
+        flex-shrink: 0;
+      }
+
+      .changelog-body h4 {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 4px;
+      }
+
+      .changelog-body p {
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+
+      /* ── FOOTER ── */
+      .doc-footer {
+        background: var(--bg-soft);
+        border-top: 1px solid var(--border);
+        padding: 40px 64px;
+        margin-left: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+
+      .doc-footer p {
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+      .doc-footer a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .doc-footer a:hover {
+        text-decoration: underline;
+      }
+
+      /* ── DIVIDER ── */
+      hr.doc-divider {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 32px 0;
+      }
+
+      /* ── LIST STYLES ── */
+      .doc-list {
+        list-style: none;
+        padding: 0;
+        margin: 16px 0;
+      }
+
+      .doc-list li {
+        padding: 8px 0 8px 28px;
+        position: relative;
+        font-size: 14px;
+        color: var(--text-body);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .doc-list li:last-child {
+        border-bottom: none;
+      }
+
+      .doc-list li::before {
+        content: "✦";
+        position: absolute;
+        left: 0;
+        color: var(--primary);
+        font-size: 10px;
+        top: 11px;
+      }
+
+      /* ── RESPONSIVE ── */
+      @media (max-width: 900px) {
+        .sidebar {
+          display: none;
+        }
+        .main {
+          margin-left: 0;
+        }
+        .hero {
+          padding: 48px 28px;
+        }
+        .content {
+          padding: 36px 28px;
+        }
+        .feature-grid,
+        .pricing-grid,
+        .menu-grid,
+        .support-grid {
+          grid-template-columns: 1fr;
+        }
+        .hero h1 {
+          font-size: 28px;
+        }
+        .doc-footer {
+          padding: 32px 28px;
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+
+      /* ── SCROLLBAR ── */
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: var(--bg);
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: var(--border);
+        border-radius: 5px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--text-muted);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ══════════════════════════════════════════════
+     SIDEBAR
+══════════════════════════════════════════════ -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="brand">
+          <div class="logo-icon">🤖</div>
+          <div class="logo-text">AI <span>Influencer</span></div>
+        </div>
+        <div class="sidebar-version">Documentation · v1.0</div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Getting Started</div>
+        <a href="#introduction" class="nav-item"
+          ><span class="nav-icon">👋</span> Introduction</a
+        >
+        <a href="#demo" class="nav-item"
+          ><span class="nav-icon">▶️</span> Live Demo</a
+        >
+        <a href="#requirements" class="nav-item"
+          ><span class="nav-icon">📋</span> Requirements</a
+        >
+
+        <div class="nav-section-label">Installation</div>
+        <a href="#cpanel" class="nav-item"
+          ><span class="nav-icon">🖥️</span> cPanel Setup</a
+        >
+        <a href="#aapanel" class="nav-item"
+          ><span class="nav-icon">⚙️</span> aaPanel Setup</a
+        >
+        <a href="#app-install" class="nav-item"
+          ><span class="nav-icon">🚀</span> App Installer</a
+        >
+
+        <div class="nav-section-label">Platform</div>
+        <a href="#features" class="nav-item"
+          ><span class="nav-icon">✨</span> Features</a
+        >
+        <a href="#admin-panel" class="nav-item"
+          ><span class="nav-icon">🛡️</span> Admin Panel</a
+        >
+        <a href="#user-panel" class="nav-item"
+          ><span class="nav-icon">👤</span> User Panel</a
+        >
+        <div class="nav-section-label">Help</div>
+        <a href="#faq" class="nav-item"><span class="nav-icon">❓</span> FAQ</a>
+        <a href="#changelog" class="nav-item"
+          ><span class="nav-icon">📝</span> Changelog</a
+        >
+        <a href="#support" class="nav-item"
+          ><span class="nav-icon">💬</span> Support</a
+        >
+      </nav>
+    </aside>
+
+    <!-- ══════════════════════════════════════════════
+     MAIN
+══════════════════════════════════════════════ -->
+    <main class="main">
+      <!-- HERO -->
+      <div class="hero">
+        <div class="hero-badge">📄 Official Documentation</div>
+        <h1>AI Influencer<br /><span>Complete Documentation</span></h1>
+        <p>
+          Your all-in-one guide to installing, configuring, and scaling the AI
+          Influencer SaaS platform — from first deploy to full monetization.
+        </p>
+        <div class="hero-meta">
+          <div class="hero-meta-item">
+            <span class="label">Version</span>
+            <span class="value">1.0.0</span>
+          </div>
+          <div class="hero-meta-item">
+            <span class="label">Last Updated</span>
+            <span class="value">March 2026</span>
+          </div>
+          <div class="hero-meta-item">
+            <span class="label">License</span>
+            <span class="value">Regular / Extended</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTENT -->
+      <div class="content">
+        <!-- ── 1. INTRODUCTION ── -->
+        <span class="section-anchor" id="introduction"></span>
+        <div class="doc-section">
+          <div class="section-header">
+            <div class="section-icon">👋</div>
+            <div>
+              <div class="section-number">01</div>
+              <h2>Introduction</h2>
+            </div>
+          </div>
+
+          <p>
+            Welcome to <strong>AI Influencer</strong> — a fully-featured SaaS
+            platform that empowers creators, brands, and agencies to generate
+            hyperreal AI-powered reels, product videos, and influencer content
+            from a single text prompt. No editing skills. No camera crew. No
+            limits.
+          </p>
+
+          <div class="callout">
+            <span class="callout-icon">🎉</span>
+            <div>
+              <strong>Zero-Config Database Setup</strong>This platform requires
+              <em>no database import</em> and
+              <em>no manual environment variable configuration</em>. Everything
+              is handled automatically through the built-in App Installer at
+              <code>/setup</code>. Just set up your Node.js app and navigate to
+              the installer — that's it.
+            </div>
+          </div>
+
+          <div class="feature-grid">
+            <div class="feature-card">
+              <span class="f-icon">🎬</span>
+              <h4>AI Reel Generator</h4>
+              <p>
+                Turn any text prompt into a viral-ready reel with motion, sound,
+                and captions in seconds.
+              </p>
+            </div>
+            <div class="feature-card">
+              <span class="f-icon">🧬</span>
+              <h4>Custom AI Models</h4>
+              <p>You can use your own REST API for as AI Provider</p>
+            </div>
+            <div class="feature-card">
+              <span class="f-icon">🛍️</span>
+              <h4>AI Product Videos</h4>
+              <p>
+                Showcase your product in luxury scenes, lifestyle settings, or
+                branded worlds — no photoshoot needed.
+              </p>
+            </div>
+            <div class="feature-card">
+              <span class="f-icon">📱</span>
+              <h4>Multi-Platform Ready</h4>
+              <p>
+                Auto-optimized output for Instagram, TikTok, and YouTube Shorts
+                — all from one dashboard.
+              </p>
+            </div>
+            <div class="feature-card">
+              <span class="f-icon">💰</span>
+              <h4>Built-in Monetization</h4>
+              <p>
+                Subscription plans, credit system, and payment gateway
+                integrations ready out of the box.
+              </p>
+            </div>
+            <div class="feature-card">
+              <span class="f-icon">🌐</span>
+              <h4>Multi-Language Support</h4>
+              <p>
+                Full web translation management with localization controls built
+                into the admin panel.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── 2. DEMO ── -->
+        <span class="section-anchor" id="demo"></span>
+        <div class="doc-section">
+          <div class="section-header">
+            <div class="section-icon">▶️</div>
+            <div>
+              <div class="section-number">02</div>
+              <h2>Live Demo</h2>
+            </div>
+          </div>
+
+          <p>
+            Watch the full platform walkthrough below to get a complete picture
+            of the AI Influencer experience — from reel generation to admin
+            management.
+          </p>
+
+          <div class="video-container">
+            <a
+              href="https://www.youtube.com/watch?v=qOkln4ojuu4"
+              target="_blank"
+              class="video-placeholder"
+            >
+              <div class="video-play-button">▶</div>
+              <div class="video-info">
+                <h3>AI Influencer – Platform Demo</h3>
+                <p>Click to watch on YouTube</p>
+              </div>
+            </a>
+          </div>
+
+          <div class="callout" style="display: block">
+            <div
+              style="
+                display: flex;
+                align-items: flex-start;
+                gap: 12px;
+                margin-bottom: 16px;
+              "
+            >
+              <span class="callout-icon" style="margin-top: 2px">💡</span>
+              <div style="flex: 1">
+                <strong
+                  style="
+                    color: var(--text-dark);
+                    font-size: 15px;
+                    display: block;
+                    margin-bottom: 8px;
+                  "
+                  >Demo Login Credentials</strong
+                >
+                <p style="margin: 0; font-size: 14px">
+                  Use these default credentials to access the demo:
+                </p>
+              </div>
+            </div>
+
+            <div
+              style="
+                background: var(--bg);
+                border: 1px solid var(--border);
+                border-radius: var(--radius-sm);
+                padding: 24px;
+                margin-bottom: 16px;
+              "
+            >
+              <div
+                style="
+                  font-weight: 700;
+                  color: var(--text-dark);
+                  margin-bottom: 16px;
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                  font-size: 15px;
+                "
+              >
+                🛡️ Admin Panel
+              </div>
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: 100px 1fr;
+                  gap: 12px;
+                  font-size: 14px;
+                "
+              >
+                <strong>URL:</strong>
+                <code>domain.com/admin</code>
+                <strong>Email:</strong>
+                <code>admin@admin.com</code>
+                <strong>Password:</strong>
+                <code>password</code>
+              </div>
+            </div>
+
+            <div
+              style="
+                background: var(--bg);
+                border: 1px solid var(--border);
+                border-radius: var(--radius-sm);
+                padding: 24px;
+                margin-bottom: 16px;
+              "
+            >
+              <div
+                style="
+                  font-weight: 700;
+                  color: var(--text-dark);
+                  margin-bottom: 16px;
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                  font-size: 15px;
+                "
+              >
+                👤 User Panel
+              </div>
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: 100px 1fr;
+                  gap: 12px;
+                  font-size: 14px;
+                "
+              >
+                <strong>URL:</strong>
+                <code>domain.com/user</code>
+                <strong>Email:</strong>
+                <code>user@user.com</code>
+                <strong>Password:</strong>
+                <code>password</code>
+              </div>
+            </div>
+
+            <p
+              style="
+                margin: 0;
+                font-size: 13px;
+                color: var(--text-muted);
+                font-style: italic;
+              "
+            >
+              Note: Replace "domain.com" with your actual domain name.
+            </p>
+          </div>
+        </div>
+
+        <!-- ── 3. REQUIREMENTS ── -->
+        <span class="section-anchor" id="requirements"></span>
+        <div class="doc-section">
+          <div class="section-header">
+            <div class="section-icon">📋</div>
+            <div>
+              <div class="section-number">03</div>
+              <h2>Requirements</h2>
+            </div>
+          </div>
+
+          <p>
+            Before installing, make sure your hosting environment meets the
+            following requirements.
+          </p>
+
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Requirement</th>
+                <th>Minimum</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Node.js</strong></td>
+                <td><span class="badge">v18+</span></td>
+                <td>LTS recommended. Available on cPanel & aaPanel.</td>
+              </tr>
+              <tr>
+                <td><strong>NPM</strong></td>
+                <td><span class="badge">v9+</span></td>
+                <td>Bundled with Node.js installation.</td>
+              </tr>
+              <tr>
+                <td><strong>Database</strong></td>
+                <td><span class="badge">Not Required</span></td>
+                <td>Auto-configured via the <code>/setup</code> installer.</td>
+              </tr>
+              <tr>
+                <td><strong>Environment Variables</strong></td>
+                <td><span class="badge">Not Required</span></td>
+                <td>Auto-configured via the <code>/setup</code> installer.</td>
+              </tr>
+              <tr>
+                <td><strong>Hosting Panel</strong></td>
+                <td><span class="badge">cPanel or aaPanel</span></td>
+                <td>Any panel that supports Node.js app creation.</td>
+              </tr>
+              <tr>
+                <td><strong>SSL Certificate</strong></td>
+                <td><span class="badge">Recommended</span></td>
+                <td>Required for payment gateways and social login.</td>
+              </tr>
+              <tr>
+                <td><strong>RAM</strong></td>
+                <td><span class="badge">512 MB+</span></td>
+                <td>1 GB+ recommended for production use.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="callout">
+            <span class="callout-icon">⚠️</span>
+            <div>
+              <strong>Important Note</strong>You do <em>not</em> need to
+              manually import any database or set up <code>.env</code> files.
+              The built-in installer at
+              <code>yourdomain.com/setup</code> handles all of this
+              automatically after your Node.js app is running.
+            </div>
+          </div>
+        </div>
+
+        <!-- ── 4. CPANEL ── -->
+        <span class="section-anchor" id="cpanel"></span>
+        <div class="doc-section">
+          <div class="section-header">
+            <div class="section-icon">🖥️</div>
+            <div>
+              <div class="section-number">04</div>
+              <h2>Installation — cPanel</h2>
+            </div>
+          </div>
+
+          <p>
+            Follow this step-by-step guide to deploy AI Influencer on a cPanel
+            hosting environment. A full video walkthrough is also available
+            below.
+          </p>
+
+          <div class="video-container">
+            <a
+              href="https://www.youtube.com/watch?v=FbAbltEPDHQ"
+              target="_blank"
+              class="video-placeholder"
+            >
+              <div class="video-play-button">▶</div>
+              <div class="video-info">
+                <h3>How to Setup Node.js App on cPanel</h3>
+                <p>Click to watch on YouTube</p>
+              </div>
+            </a>
+          </div>
+
+          <div class="steps">
+            <div class="step">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <h4>Upload Your Files</h4>
+                <p>
+                  Log in to cPanel and navigate to
+                  <strong>File Manager</strong>. Upload the extracted
+                  application folder to your desired directory (e.g.,
+                  <code>public_html</code> or a subdirectory).
+                </p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <h4>Create a Node.js App</h4>
+                <p>
+                  In cPanel, go to
+                  <strong>Software → Setup Node.js App</strong>. Click
+                  <em>Create Application</em>, select your Node.js version
+                  (18+), set the application root to your uploaded folder, and
+                  set the startup file to <code>server.js</code> (or as
+                  specified in your package).
+                </p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <h4>Install Dependencies</h4>
+                <p>
+                  In the Node.js App panel, click
+                  <strong>Run NPM Install</strong>. This will install all
+                  required packages automatically. Wait for the process to
+                  complete.
+                </p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-num">4</div>
+              <div class="step-body">
+                <h4>Start the Application</h4>
+                <p>
+                  Click <strong>Start App</strong> in the Node.js App panel.
+                  Your application is now running. No environment variables need
+                  to be added manually.
+                </p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-num">5</div>
+              <div class="step-body">
+                <h4>Run the App Installer</h4>
+                <p>
+                  Open your browser and navigate to
+                  <code>yourdomain.com/setup</code>. The built-in installer will
+                  automatically configure your database, environment, and admin
+                  account. Follow the on-screen steps to complete setup.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout">
+            <span class="callout-icon">✅</span>
+            <div>
+              <strong>You're Done!</strong>After completing the installer at
+              <code>/setup</code>, your platform is fully live. No database
+              import, no <code>.env</code> file editing required.
+            </div>
+          </div>
+        </div>
+
+        <!-- ── 5. AAPANEL ── -->
+        <span class="section-anchor" id="aapanel"></span>
+        <div class="doc-section">
+          <div class="section-header">
+            <div class="section-icon">⚙️</div>
+            <div>
+              <div class="section-number">05</div>
+              <h2>Installation — aaPanel</h2>
+            </div>
+          </div>
+
+          <p>
+            Prefer aaPanel? The process is equally straightforward. Watch the
+            video guide below for a complete walkthrough.
+          </p>
+
+          <div class="video-container">
+            <a
+              href="https://www.youtube.com/watch?v=wg7zsc4-A84"
+              target="_blank"
+              class="video-placeholder"
+            >
+              <div class="video-play-button">▶</div>
+              <div class="video-info">
+                <h3>How to Setup Node.js App on aaPanel</h3>
+                <p>Click to watch on YouTube</p>
+              </div>
+            </a>
+          </div>
+
+          <div class="steps">
+            <div class="step">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <h4>Upload Files via File Manager</h4>
+                <p>
+                  Log in to aaPanel and use the <strong>File Manager</strong> or
+                  FTP to upload your application files to your server directory
+                  (e.g., <code>/www/wwwroot/yourdomain.com</code>).
+                </p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <h4>Create a Node.js Project</h4>
+                <p>
+                  In aaPanel, go to
+                  <strong>App Store → Node.js Version Manager</strong> (or use
+                  the Node.js project manager). Create a new project pointing to
+                  your application directory. Select Node.js 18+ and set the
+                  entry file.
+                </p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <h4>Install Dependencies &amp; Start</h4>
+                <p>
+                  Run <code>npm install</code> from the terminal or the aaPanel
+                  Node.js interface. Once complete, start the application using
+                  the panel's start button or <code>pm2</code>.
+                </p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-num">4</div>
+              <div class="step-body">
+                <h4>Run the App Installer</h4>
+                <p>
+                  Visit <code>yourdomain.com/setup</code> in your browser. The
+                  installer handles all database creation, configuration, and
+                  initial admin setup automatically.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout">
+            <span class="callout-icon">💡</span>
+            <div>
+              <strong>Pro Tip</strong>Use <strong>PM2</strong> (process manager)
+              on aaPanel to keep your Node.js app running persistently even
+              after server reboots. Install it with
+              <code>npm install -g pm2</code>.
+            </div>
+          </div>
+        </div>
+
+        <!-- ── 6. APP INSTALLER ── -->
+        <span class="section-anchor" id="app-install"></span>
+        <div class="doc-section">
+          <div class="section-header">
+            <div class="section-icon">🚀</div>
+            <div>
+              <div class="section-number">06</div>
+              <h2>App Installer ( /setup )</h2>
+            </div>
+          </div>
+
+          <p>
+            AI Influencer ships with a powerful built-in installer that
+            eliminates all manual configuration. Once your Node.js app is
+            running, simply visit the <code>/setup</code> route to get started.
+          </p>
+
+          <div class="card">
+            <div class="card-title">🌐 Installer URL</div>
+            <div class="code-block">
+              <div class="code-label">Browser Address Bar</div>
+              <pre><span class="code-url">https://yourdomain.com/setup</span></pre>
+            </div>
+          </div>
+
+          <p>
+            The installer will walk you through the following steps
+            automatically:
+          </p>
+
+          <ul class="doc-list">
+            <li>
+              <strong>Database Setup</strong> — Creates and configures the
+              database automatically. No SQL import needed.
+            </li>
+            <li>
+              <strong>Environment Configuration</strong> — Writes all necessary
+              environment variables to the system. No manual
+              <code>.env</code> editing.
+            </li>
+            <li>
+              <strong>Installer Lock</strong> — After successful installation,
+              the <code>/setup</code> route is automatically disabled for
+              security.
+            </li>
+          </ul>
+
+          <div class="callout">
+            <span class="callout-icon">🔒</span>
+            <div>
+              <strong>Security Notice</strong>The <code>/setup</code> route is
+              automatically locked after first-time installation. If you need to
+              re-run the installer, refer to the support documentation or
+              contact our support team.
+            </div>
+          </div>
+        </div>
+
+        <!-- ── 7. FEATURES ── -->
+        <span class="section-anchor" id="features"></span>
+        <div class="doc-section">
+          <div class="section-header">
+            <div class="section-icon">✨</div>
+            <div>
+              <div class="section-number">07</div>
+              <h2>Platform Features</h2>
+            </div>
+          </div>
+
+          <p>
+            AI Influencer is packed with everything a modern AI content SaaS
+            needs — from content generation to monetization and beyond.
+          </p>
+
+          <hr class="doc-divider" />
+
+          <div class="card">
+            <div class="card-title">🎬 AI Reel Creation</div>
+            <p>
+              Generate hyperreal motion reels, complete with sound and captions,
+              from a single text prompt. The platform produces social-ready
+              video content in seconds — no editing skills required.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-title">🧬 AI Model Builder</div>
+            <p>
+              Design fully custom AI personas — choose any appearance,
+              ethnicity, or style. Train the model on a unique identity and
+              deploy it across videos, reels, ads, and product shoots. Unlimited
+              content, zero reshoots.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-title">🛍️ AI Product Models</div>
+            <p>
+              Upload a product photo and let the AI place it in any scene, any
+              style, any world. Perfect for e-commerce brands looking to
+              generate stunning product visuals without expensive photoshoots.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-title">🎭 AI Influencer Studio</div>
+            <p>
+              Create a virtual influencer persona that generates viral dance
+              reels, trending content, and social-ready videos on demand. Built
+              for Instagram, TikTok, and YouTube Shorts with auto-optimization
+              per platform.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-title">📝 Script to Video</div>
+            <p>
+              Convert written scripts directly into fully produced video
+              content. Ideal for creators who prefer to write their content
+              before generating the final visual output.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-title">💳 Credit-Based Monetization</div>
+            <p>
+              Fully integrated subscription and credit system. Admins can
+              configure plans, pricing, and payment gateways. Users purchase
+              credits to generate content — a scalable SaaS revenue model out of
+              the box.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-title">🌐 Multi-Language & Localization</div>
+            <p>
+              Full web translation management built into the admin panel. Reach
+              a global audience by translating the entire platform interface
+              into any language.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-title">📊 Usage Analytics</div>
+            <p>
+              Users can track their credit consumption and generation history.
+              Admins get a full dashboard overview of platform activity, user
+              growth, and revenue.
+            </p>
+          </div>
+        </div>
+
+        <!-- ── 8. ADMIN PANEL ── -->
+        <span class="section-anchor" id="admin-panel"></span>
+        <div class="doc-section">
+          <div class="section-header">
+            <div class="section-icon">🛡️</div>
+            <div>
+              <div class="section-number">08</div>
+              <h2>Admin Panel</h2>
+            </div>
+          </div>
+
+          <p>
+            The Admin Panel gives you complete control over every aspect of the
+            platform — from AI provider configuration to user management,
+            monetization, and appearance customization.
+          </p>
+
+          <div class="callout">
+            <span class="callout-icon">🔑</span>
+            <div>
+              <strong>Admin Access</strong>Log in at
+              <code>yourdomain.com/admin</code>
+            </div>
+          </div>
+
+          <div class="callout" style="display: block">
+            <div style="display: flex; gap: 12px; margin-bottom: 12px">
+              <span class="callout-icon">💡</span>
+              <strong style="color: var(--text-dark)"
+                >Demo Login Credentials</strong
+              >
+            </div>
+            <p style="margin: 0 0 16px 0">
+              Use these default credentials to access the demo:
+            </p>
+
+            <div
+              style="
+                background: var(--bg);
+                border: 1px solid var(--border);
+                border-radius: var(--radius-sm);
+                padding: 20px;
+                margin-bottom: 16px;
+                width: 100%;
+              "
+            >
+              <div
+                style="
+                  font-weight: 700;
+                  color: var(--text-dark);
+                  margin-bottom: 12px;
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                  font-size: 15px;
+                "
+              >
+                🛡️ Admin Panel
+              </div>
+              <div style="font-size: 14px; line-height: 2">
+                <div style="display: flex; gap: 8px">
+                  <strong style="min-width: 90px">URL:</strong>
+                  <code style="flex: 1">domain.com/admin</code>
+                </div>
+                <div style="display: flex; gap: 8px">
+                  <strong style="min-width: 90px">Email:</strong>
+                  <code style="flex: 1">admin@admin.com</code>
+                </div>
+                <div style="display: flex; gap: 8px">
+                  <strong style="min-width: 90px">Password:</strong>
+                  <code style="flex: 1">password</code>
+                </div>
+              </div>
+            </div>
+
+            <div
+              style="
+                background: var(--bg);
+                border: 1px solid var(--border);
+                border-radius: var(--radius-sm);
+                padding: 20px;
+                width: 100%;
+              "
+            >
+              <div
+                style="
+                  font-weight: 700;
+                  color: var(--text-dark);
+                  margin-bottom: 12px;
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                  font-size: 15px;
+                "
+              >
+                👤 User Panel
+              </div>
+              <div style="font-size: 14px; line-height: 2">
+                <div style="display: flex; gap: 8px">
+                  <strong style="min-width: 90px">URL:</strong>
+                  <code style="flex: 1">domain.com/user</code>
+                </div>
+                <div style="display: flex; gap: 8px">
+                  <strong style="min-width: 90px">Email:</strong>
+                  <code style="flex: 1">user@user.com</code>
+                </div>
+                <div style="display: flex; gap: 8px">
+                  <strong style="min-width: 90px">Password:</strong>
+                  <code style="flex: 1">password</code>
+                </div>
+              </div>
+            </div>
+
+            <p
+              style="
+                margin-top: 16px;
+                font-size: 13px;
+                color: var(--text-muted);
+                font-style: italic;
+              "
+            >
+              Note: Replace "domain.com" with your actual domain name.
+            </p>
+          </div>
+
+          <div class="menu-grid">
+            <div class="menu-card">
+              <h4>📊 Dashboard</h4>
+              <ul>
+                <li>Platform overview &amp; stats</li>
+                <li>User activity summary</li>
+                <li>Revenue at a glance</li>
+              </ul>
+            </div>
+            <div class="menu-card">
+              <h4>👥 Users</h4>
+              <ul>
+                <li>View &amp; manage all users</li>
+                <li>Assign or adjust credits</li>
+                <li>Suspend or activate accounts</li>
+              </ul>
+            </div>
+            <div class="menu-card">
+              <h4>🤖 AI &amp; Automation</h4>
+              <ul>
+                <li class="sub">AI Providers — configure AI APIs</li>
+                <li class="sub">Prompt Templates — manage defaults</li>
+                <li class="sub">Templates — content templates</li>
+                <li class="sub">Task Pricing — set credit costs</li>
+              </ul>
+            </div>
+            <div class="menu-card">
+              <h4>💰 Monetization</h4>
+              <ul>
+                <li class="sub">Plans — create &amp; edit pricing tiers</li>
+                <li class="sub">Payment Gateways — configure payments</li>
+                <li class="sub">Orders — view all transactions</li>
+              </ul>
+            </div>
+            <div class="menu-card">
+              <h4>🎨 Appearance</h4>
+              <ul>
+                <li class="sub">Web Theme — colors &amp; branding</li>
+                <li class="sub">Site Settings — logo, SEO, metadata</li>
+                <li class="sub">Social Login — OAuth configuration</li>
+              </ul>
+            </div>
+            <div class="menu-card">
+              <h4>📄 Content</h4>
+              <ul>
+                <li class="sub">Blogs — publish &amp; manage articles</li>
+                <li class="sub">Leads — capture &amp; manage leads</li>
+              </ul>
+            </div>
+            <div class="menu-card">
+              <h4>📧 Communications</h4>
+              <ul>
+                <li class="sub">Email Settings — SMTP configuration</li>
+                <li class="sub">Email Templates — customize emails</li>
+              </ul>
+            </div>
+            <div class="menu-card">
+              <h4>🌐 Localization</h4>
+              <ul>
+                <li class="sub">Web Translation — full UI translation</li>
+              </ul>
+            </div>
+          </div>
+
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Section</th>
+                <th>Key Actions</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>AI Providers</strong></td>
+                <td>Add API keys, select models, toggle providers</td>
+                <td>Supports multiple AI backend providers</td>
+              </tr>
+              <tr>
+                <td><strong>Task Pricing</strong></td>
+                <td>Set credit cost per generation task type</td>
+                <td>Fully customizable per task</td>
+              </tr>
+              <tr>
+                <td><strong>Plans</strong></td>
+                <td>Create free, pro, and enterprise tiers</td>
+                <td>Credit amounts, duration, model limits</td>
+              </tr>
+              <tr>
+                <td><strong>Payment Gateways</strong></td>
+                <td>Enable Stripe, PayPal, or others</td>
+                <td>Configure keys from admin panel</td>
+              </tr>
+              <tr>
+                <td><strong>Web Translation</strong></td>
+                <td>Translate all UI strings to any language</td>
+                <td>No code changes needed</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ── 9. USER PANEL ── -->
+        <span class="section-anchor" id="user-panel"></span>
+        <div class="doc-section">
+          <div class="section-header">
+            <div class="section-icon">👤</div>
+            <div>
+              <div class="section-number">09</div>
+              <h2>User Panel</h2>
+            </div>
+          </div>
+
+          <p>
+            The User Panel is where creators do their work — building AI
+            influencers, generating content, managing their gallery, and
+            tracking usage. It's designed to be intuitive and fast.
+          </p>
+
+          <div class="menu-grid">
+            <div class="menu-card">
+              <h4>📊 Dashboard</h4>
+              <ul>
+                <li>Credit balance overview</li>
+                <li>Recent content activity</li>
+                <li>Quick-start shortcuts</li>
+              </ul>
+            </div>
+            <div class="menu-card">
+              <h4>🧬 Influencers</h4>
+              <ul>
+                <li>Create custom AI personas</li>
+                <li>Manage existing models</li>
+                <li>Deploy across content types</li>
+              </ul>
+            </div>
+            <div class="menu-card">
+              <h4>🖼️ Gallery</h4>
+              <ul>
+                <li>View all generated content</li>
+                <li>Download &amp; share assets</li>
+                <li>Organize by project</li>
+              </ul>
+            </div>
+            <div class="menu-card">
+              <h4>🎬 Content</h4>
+              <ul>
+                <li>Generate AI reels &amp; videos</li>
+                <li>Product video creation</li>
+                <li>Platform-optimized output</li>
+              </ul>
+            </div>
+            <div class="menu-card">
+              <h4>📝 Script to Video</h4>
+              <ul>
+                <li>Write a script or prompt</li>
+                <li>Auto-generate full video</li>
+                <li>Edit &amp; regenerate easily</li>
+              </ul>
+            </div>
+            <div class="menu-card">
+              <h4>📈 Usage</h4>
+              <ul>
+                <li>Credit consumption history</li>
+                <li>Generation logs by task</li>
+                <li>Plan &amp; renewal details</li>
+              </ul>
+            </div>
+            <div class="menu-card">
+              <h4>🔔 Notifications</h4>
+              <ul>
+                <li>Generation complete alerts</li>
+                <li>Plan expiry reminders</li>
+                <li>Platform announcements</li>
+              </ul>
+            </div>
+            <div class="menu-card">
+              <h4>🆘 Help</h4>
+              <ul>
+                <li>Access support resources</li>
+                <li>Submit support requests</li>
+                <li>View platform FAQs</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── 11. FAQ ── -->
+        <span class="section-anchor" id="faq"></span>
+        <div class="doc-section">
+          <div class="section-header">
+            <div class="section-icon">❓</div>
+            <div>
+              <div class="section-number">11</div>
+              <h2>Frequently Asked Questions</h2>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">
+              🗄️ Do I need to import a database manually?
+            </div>
+            <p>
+              No. The built-in installer at
+              <code>yourdomain.com/setup</code> handles all database creation
+              and configuration automatically. There is no SQL file to import.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-title">
+              🔧 Do I need to configure environment variables?
+            </div>
+            <p>
+              No. You do not need to manually create or edit any
+              <code>.env</code> file. All environment configuration is handled
+              automatically by the <code>/setup</code> installer after your
+              Node.js app is running.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-title">📦 What hosting panels are supported?</div>
+            <p>
+              Any hosting panel that supports Node.js application creation. This
+              includes <strong>cPanel</strong>, <strong>aaPanel</strong>, and
+              any VPS/server with Node.js 18+ installed. Video tutorials are
+              provided for both cPanel and aaPanel.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-title">
+              💳 Which payment gateways are supported?
+            </div>
+            <p>
+              Payment gateways are configurable from the Admin Panel under
+              <strong>Monetization → Payment Gateways</strong>. Supported
+              gateways can be enabled and configured with your API keys directly
+              from the dashboard.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-title">
+              🌍 Can I translate the platform into another language?
+            </div>
+            <p>
+              Yes. The platform includes a full
+              <strong>Web Translation</strong> manager under
+              <strong>Admin → Localization</strong>. You can translate every UI
+              string without touching any code.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-title">
+              🤖 Can I use my own AI provider / API keys?
+            </div>
+            <p>
+              Yes. Under
+              <strong>Admin → AI &amp; Automation → AI Providers</strong>, you
+              can configure your own API keys and select from supported AI
+              backend providers.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-title">
+              🔒 Is the /setup route secure after installation?
+            </div>
+            <p>
+              Yes. The <code>/setup</code> route is automatically locked and
+              disabled after the first successful installation. It cannot be
+              accessed again without manual intervention, protecting your
+              platform from unauthorized re-configuration.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-title">
+              📱 Which social platforms is the content optimized for?
+            </div>
+            <p>
+              AI Influencer auto-optimizes content output for
+              <strong>Instagram</strong>, <strong>TikTok</strong>, and
+              <strong>YouTube Shorts</strong>. Each platform's aspect ratio,
+              duration, and format requirements are handled automatically.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-title">
+              🎨 Can I white-label or rebrand the platform?
+            </div>
+            <p>
+              Yes. Under <strong>Admin → Appearance → Site Settings</strong>,
+              you can update the platform name, logo, favicon, colors, and all
+              branding elements to match your own brand identity.
+            </p>
+          </div>
+        </div>
+
+        <!-- ── 12. CHANGELOG ── -->
+        <span class="section-anchor" id="changelog"></span>
+        <div class="doc-section">
+          <div class="section-header">
+            <div class="section-icon">📝</div>
+            <div>
+              <div class="section-number">12</div>
+              <h2>Changelog</h2>
+            </div>
+          </div>
+
+          <p>
+            All notable changes, improvements, and bug fixes are recorded here.
+            We ship updates regularly to improve performance, add features, and
+            address feedback.
+          </p>
+
+          <div class="card">
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 20px;
+              "
+            >
+              <div style="display: flex; align-items: center; gap: 10px">
+                <span class="badge">v1.0.0</span>
+                <span style="font-size: 13px; color: var(--text-muted)"
+                  >March 2026</span
+                >
+              </div>
+              <span class="badge">Latest</span>
+            </div>
+
+            <div class="changelog-item">
+              <div class="changelog-dot"></div>
+              <div class="changelog-body">
+                <h4>🚀 Initial Release</h4>
+                <p>
+                  First public release of AI Influencer on Envato CodeCanyon.
+                </p>
+              </div>
+            </div>
+            <div class="changelog-item">
+              <div class="changelog-dot"></div>
+              <div class="changelog-body">
+                <h4>🎬 AI Reel Generator</h4>
+                <p>
+                  Full prompt-to-reel pipeline with motion, sound, and
+                  auto-captions.
+                </p>
+              </div>
+            </div>
+            <div class="changelog-item">
+              <div class="changelog-dot"></div>
+              <div class="changelog-body">
+                <h4>🧬 AI Model Builder</h4>
+                <p>
+                  Custom AI persona creation with full appearance and style
+                  control.
+                </p>
+              </div>
+            </div>
+            <div class="changelog-item">
+              <div class="changelog-dot"></div>
+              <div class="changelog-body">
+                <h4>🛍️ AI Product Video Studio</h4>
+                <p>
+                  Product photo to scene-placed video generation in any style.
+                </p>
+              </div>
+            </div>
+            <div class="changelog-item">
+              <div class="changelog-dot"></div>
+              <div class="changelog-body">
+                <h4>📝 Script to Video</h4>
+                <p>
+                  Direct script-to-video pipeline for text-first content
+                  creators.
+                </p>
+              </div>
+            </div>
+            <div class="changelog-item">
+              <div class="changelog-dot"></div>
+              <div class="changelog-body">
+                <h4>💳 Credit & Subscription System</h4>
+                <p>
+                  Full SaaS monetization with plans, credits, and payment
+                  gateway integrations.
+                </p>
+              </div>
+            </div>
+            <div class="changelog-item">
+              <div class="changelog-dot"></div>
+              <div class="changelog-body">
+                <h4>🌐 Localization Manager</h4>
+                <p>Full UI translation management for global deployment.</p>
+              </div>
+            </div>
+            <div class="changelog-item">
+              <div class="changelog-dot"></div>
+              <div class="changelog-body">
+                <h4>🔧 Zero-Config Installer</h4>
+                <p>
+                  Built-in <code>/setup</code> installer — no database import or
+                  <code>.env</code> configuration required.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── 13. SUPPORT ── -->
+        <span class="section-anchor" id="support"></span>
+        <div class="doc-section">
+          <div class="section-header">
+            <div class="section-icon">💬</div>
+            <div>
+              <div class="section-number">13</div>
+              <h2>Support</h2>
+            </div>
+          </div>
+
+          <p>
+            We're here to help. Whether you have a quick question or need
+            hands-on assistance with your setup, reach out through any of the
+            channels below and we'll get back to you promptly.
+          </p>
+
+          <div class="support-grid">
+            <!-- WhatsApp -->
+            <div class="support-card">
+              <span class="s-icon">💬</span>
+              <h4>WhatsApp Support</h4>
+              <p>
+                Get fast, direct support from our team via WhatsApp. Best for
+                urgent setup questions and quick troubleshooting.
+              </p>
+              <div class="support-actions">
+                <a
+                  href="https://wa.me/918430088300"
+                  target="_blank"
+                  class="btn btn-whatsapp"
+                  style="justify-content: center; position: relative"
+                >
+                  <span class="ping-dot"></span>
+                  💬 Chat on WhatsApp
+                </a>
+                <!-- Copyable number row -->
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    background: var(--bg);
+                    border: 1px solid var(--border);
+                    border-radius: var(--radius-sm);
+                    padding: 8px 14px;
+                    font-size: 13px;
+                  "
+                >
+                  <span
+                    style="
+                      color: var(--text-body);
+                      font-weight: 500;
+                      letter-spacing: 0.03em;
+                    "
+                  >
+                    +91 84300 88300
+                  </span>
+                  <button
+                    id="copy-support-num"
+                    onclick="
+                      navigator.clipboard
+                        .writeText('+918430088300')
+                        .then(function () {
+                          var b = document.getElementById('copy-support-num');
+                          b.textContent = '✅ Copied';
+                          setTimeout(function () {
+                            b.textContent = '📋 Copy';
+                          }, 2000);
+                        })
+                    "
+                    style="
+                      background: none;
+                      border: none;
+                      color: var(--text-muted);
+                      font-size: 12px;
+                      font-weight: 600;
+                      cursor: pointer;
+                      font-family: inherit;
+                      padding: 0;
+                      transition: color 0.2s;
+                    "
+                  >
+                    📋 Copy
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Save Contact — Recommended -->
+            <div class="support-card recommended">
+              <div class="recommended-badge">⭐ Recommended</div>
+              <span class="s-icon">📱</span>
+              <h4>Save Support Contact</h4>
+              <p>
+                Save our number directly to your phone contacts so you can reach
+                us anytime — no need to search for the number again.
+              </p>
+              <div class="support-actions">
+                <button
+                  class="btn btn-whatsapp"
+                  style="
+                    cursor: pointer;
+                    font-family: inherit;
+                    justify-content: center;
+                    width: 100%;
+                    position: relative;
+                  "
+                  onclick="
+                    (function () {
+                      var vcf =
+                        'BEGIN:VCARD\nVERSION:3.0\nFN:AI Influencer Support\nORG:Support Team;\nTEL;TYPE=CELL:+918430088300\nEND:VCARD';
+                      var blob = new Blob([vcf], { type: 'text/vcard' });
+                      var url = URL.createObjectURL(blob);
+                      var a = document.createElement('a');
+                      a.href = url;
+                      a.download = 'ai-influencer-support.vcf';
+                      a.click();
+                      URL.revokeObjectURL(url);
+                    })()
+                  "
+                >
+                  <span class="ping-dot"></span>
+                  📲 Save Contact
+                </button>
+
+                <!-- Copyable number row -->
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    background: var(--bg);
+                    border: 1px solid var(--border);
+                    border-radius: var(--radius-sm);
+                    padding: 8px 14px;
+                    font-size: 13px;
+                  "
+                >
+                  <span
+                    style="
+                      color: var(--text-body);
+                      font-weight: 500;
+                      letter-spacing: 0.03em;
+                    "
+                  >
+                    +91 84300 88300
+                  </span>
+                  <button
+                    id="copy-support-num-2"
+                    onclick="
+                      navigator.clipboard
+                        .writeText('+918430088300')
+                        .then(function () {
+                          var b = document.getElementById('copy-support-num-2');
+                          b.textContent = '✅ Copied';
+                          setTimeout(function () {
+                            b.textContent = '📋 Copy';
+                          }, 2000);
+                        })
+                    "
+                    style="
+                      background: none;
+                      border: none;
+                      color: var(--text-muted);
+                      font-size: 12px;
+                      font-weight: 600;
+                      cursor: pointer;
+                      font-family: inherit;
+                      padding: 0;
+                      transition: color 0.2s;
+                    "
+                  >
+                    📋 Copy
+                  </button>
+                </div>
+
+                <a
+                  href="https://wa.me/918430088300"
+                  target="_blank"
+                  class="btn btn-save"
+                  style="justify-content: center; text-align: center"
+                >
+                  💬 Or Chat on WhatsApp
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout">
+            <span class="callout-icon">⏱️</span>
+            <div>
+              <strong>Support Hours & Response Time</strong>
+              Our typical response time is <strong>within 24 hours</strong> on
+              business days. For the fastest response, WhatsApp is recommended
+              for urgent issues. Please include your
+              <strong>purchase code</strong> and a description of your issue
+              when reaching out.
+            </div>
+          </div>
+
+          <hr class="doc-divider" />
+
+          <div class="card">
+            <div class="card-title">
+              📋 Before Contacting Support — Checklist
+            </div>
+            <ul class="doc-list">
+              <li>
+                Confirm your Node.js version is <strong>18 or higher</strong>.
+              </li>
+              <li>
+                Ensure you ran <code>npm install</code> successfully before
+                starting the app.
+              </li>
+              <li>
+                Verify the app is running before visiting <code>/setup</code>.
+              </li>
+              <li>
+                Check that your domain is correctly pointed to your server.
+              </li>
+              <li>
+                Make sure SSL is active if using payment gateways or social
+                login.
+              </li>
+              <li>
+                Watch the relevant setup video (cPanel or aaPanel) before
+                reaching out.
+              </li>
+            </ul>
+          </div>
+
+          <div class="callout">
+            <span class="callout-icon">📌</span>
+            <div>
+              <strong>Include Your Purchase Code</strong>
+              Always include your <strong>Envato purchase code</strong> when
+              submitting a support request. This helps us verify your license
+              and prioritize your ticket. You can find it in your
+              <em>Envato Downloads</em> page.
+            </div>
+          </div>
+        </div>
+
+        <!-- ── QUICK REFERENCE ── -->
+        <div class="doc-section">
+          <div class="section-header">
+            <div class="section-icon">⚡</div>
+            <div>
+              <h2>Quick Reference</h2>
+            </div>
+          </div>
+
+          <p>
+            A handy summary of the most important URLs, paths, and resources for
+            your AI Influencer installation.
+          </p>
+
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Resource</th>
+                <th>URL / Path</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>App Installer</strong></td>
+                <td><code>yourdomain.com/setup</code></td>
+                <td>Run once after Node.js app is started</td>
+              </tr>
+              <tr>
+                <td><strong>Admin Panel</strong></td>
+                <td><code>yourdomain.com/admin</code></td>
+                <td>Login with credentials set during /setup</td>
+              </tr>
+              <tr>
+                <td><strong>User Dashboard</strong></td>
+                <td><code>yourdomain.com/dashboard</code></td>
+                <td>Main creator workspace</td>
+              </tr>
+              <tr>
+                <td><strong>Demo Video</strong></td>
+                <td>
+                  <a
+                    href="https://youtu.be/qOkln4ojuu4"
+                    target="_blank"
+                    style="color: var(--primary)"
+                    >youtu.be/qOkln4ojuu4</a
+                  >
+                </td>
+                <td>Full platform walkthrough</td>
+              </tr>
+              <tr>
+                <td><strong>cPanel Setup Video</strong></td>
+                <td>
+                  <a
+                    href="https://youtu.be/FbAbltEPDHQ"
+                    target="_blank"
+                    style="color: var(--primary)"
+                    >youtu.be/FbAbltEPDHQ</a
+                  >
+                </td>
+                <td>Node.js setup on cPanel</td>
+              </tr>
+              <tr>
+                <td><strong>aaPanel Setup Video</strong></td>
+                <td>
+                  <a
+                    href="https://youtu.be/wg7zsc4-A84"
+                    target="_blank"
+                    style="color: var(--primary)"
+                    >youtu.be/wg7zsc4-A84</a
+                  >
+                </td>
+                <td>Node.js setup on aaPanel</td>
+              </tr>
+              <tr>
+                <td><strong>WhatsApp Support</strong></td>
+                <td>
+                  <a
+                    href="https://wa.me/918430088300"
+                    target="_blank"
+                    style="color: var(--primary)"
+                    >wa.me/918430088300</a
+                  >
+                </td>
+                <td>Direct support chat</td>
+              </tr>
+              <tr>
+                <td><strong>Node.js Version</strong></td>
+                <td><code>v18+</code></td>
+                <td>LTS recommended</td>
+              </tr>
+              <tr>
+                <td><strong>Entry File</strong></td>
+                <td><code>server.js</code></td>
+                <td>Set as startup file in your Node.js app panel</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- /content -->
+
+      <!-- FOOTER -->
+      <footer class="doc-footer">
+        <div>
+          <p
+            style="
+              font-weight: 700;
+              color: var(--text-dark);
+              margin-bottom: 4px;
+            "
+          >
+            🤖 AI Influencer — Documentation
+          </p>
+          <p>
+            © 2026 AI Influencer. All rights reserved. Built with ❤️ for
+            creators.
+          </p>
+        </div>
+        <div
+          style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center"
+        >
+          <a href="https://wa.me/918430088300" target="_blank"
+            >WhatsApp Support</a
+          >
+          <a href="https://youtu.be/qOkln4ojuu4" target="_blank">Demo Video</a>
+          <a href="https://codecanyon.net" target="_blank">CodeCanyon</a>
+          <span style="font-size: 12px; color: var(--text-muted)"
+            >v1.0.0 · March 2026</span
+          >
+        </div>
+      </footer>
+    </main>
+  </body>
+</html>
