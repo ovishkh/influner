@@ -149,7 +149,7 @@ const queries = [
     check: "SHOW TABLES LIKE 'support_msg';",
   },
   {
-    run: 'ALTER TABLE `user` ADD COLUMN `email_notificaion` LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT \'{"marketing": true, "alert": true, "task": true, "other": false}\';',
+    run: 'ALTER TABLE `user` ADD COLUMN `email_notificaion` LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;',
     check: "SHOW COLUMNS FROM `user` LIKE 'email_notificaion';",
   },
   {
