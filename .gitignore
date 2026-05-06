@@ -2,3 +2,6 @@
 config.json
 node_modules/
 .env
+influner_key
+influner_key.pub
+docs/vps.md
