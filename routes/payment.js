@@ -206,36 +206,30 @@ router.post("/stripe/create-session", userValidator, async (req, res) => {
       return res.json({ success: false, msg: "Plan not found" });
     const plan = plans[0];
 
-    const { secretKey } = await getStripeKeys();
-    const { symbol, code, rate } = await getCurrency(); // ← currency
-    const appUrl = process.env.APP_URL || "http://localhost:3000";
-    const stripe = require("stripe")(secretKey);
+    // ── BYPASS PAYMENT (Payment Turned Off) ──────────────────────────────────
+    const result = await updateUserPlan({ planId: plan_id, uid });
+    if (!result.success) {
+      return res.json({ success: false, msg: result.msg });
+    }
 
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      line_items: [
-        {
-          price_data: {
-            currency: code.toLowerCase(), // ← dynamic
-            unit_amount: toSmallestUnit(plan.price, rate, code), // ← converted
-            product_data: {
-              name: plan.title,
-              description: `${plan.credits} credits · ${plan.expiry_days} days`,
-            },
-          },
-          quantity: 1,
-        },
+    // record the order
+    await query(
+      `INSERT INTO orders (uid, plan_id, amount, gateway, meta, status, created_at)
+       VALUES (?, ?, ?, 'bypass', ?, 'paid', NOW())`,
+      [
+        uid,
+        plan_id,
+        0,
+        JSON.stringify({
+          type: "bypass",
+          order_id: `BYPASS_${uid}_${Date.now()}`,
+        }),
       ],
-      mode: "payment",
-      success_url: `${appUrl}/checkout/success?gateway=stripe&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${appUrl}/checkout/${plan_id}?cancelled=true`,
-      metadata: {
-        plan_id: String(plan.id),
-        uid: String(uid),
-      },
-    });
+    );
 
-    res.json({ success: true, url: session.url });
+    const appUrl = process.env.APP_URL || "http://localhost:3000";
+    return res.json({ success: true, url: `${appUrl}/checkout/success?gateway=free` });
+    // ──────────────────────────────────────────────────────────────────────────
   } catch (err) {
     console.log(err);
     res.json({
@@ -339,49 +333,30 @@ router.post("/paypal/create-order", userValidator, async (req, res) => {
       return res.json({ success: false, msg: "Plan not found" });
     const plan = plans[0];
 
-    const { instance, rz_id } = await getPayPalClient(); // your existing helper
-    const { symbol, code, rate } = await getCurrency(); // ← currency
-    const appUrl = process.env.APP_URL || "http://localhost:3000";
+    // ── BYPASS PAYMENT (Payment Turned Off) ──────────────────────────────────
+    const result = await updateUserPlan({ planId: plan_id, uid });
+    if (!result.success) {
+      return res.json({ success: false, msg: result.msg });
+    }
 
-    const localAmount = toLocalAmount(plan.price, rate);
-
-    const request = new paypal.orders.OrdersCreateRequest();
-    request.prefer("return=representation");
-    request.requestBody({
-      intent: "CAPTURE",
-      purchase_units: [
-        {
-          amount: {
-            currency_code: code.toUpperCase(), // ← dynamic
-            value: localAmount.toFixed(2), // ← converted
-          },
-          description: `${plan.title} — ${plan.credits} credits · ${plan.expiry_days} days`,
-          custom_id: JSON.stringify({
-            plan_id: String(plan.id),
-            uid: String(uid),
-          }),
-        },
+    // record the order
+    await query(
+      `INSERT INTO orders (uid, plan_id, amount, gateway, meta, status, created_at)
+       VALUES (?, ?, ?, 'bypass', ?, 'paid', NOW())`,
+      [
+        uid,
+        plan_id,
+        0,
+        JSON.stringify({
+          type: "bypass",
+          order_id: `BYPASS_${uid}_${Date.now()}`,
+        }),
       ],
-      application_context: {
-        brand_name: process.env.APP_NAME || "App",
-        landing_page: "BILLING",
-        user_action: "PAY_NOW",
-        return_url: `${appUrl}/checkout/success?gateway=paypal`,
-        cancel_url: `${appUrl}/checkout/${plan_id}?cancelled=true`,
-      },
-    });
+    );
 
-    const order = await client.execute(request);
-    const approveUrl = order.result.links.find(
-      (l) => l.rel === "approve",
-    )?.href;
-    if (!approveUrl)
-      return res.json({
-        success: false,
-        msg: "Could not get PayPal approval URL",
-      });
-
-    res.json({ success: true, url: approveUrl, orderId: order.result.id });
+    const appUrl = process.env.APP_URL || "http://localhost:3000";
+    return res.json({ success: true, url: `${appUrl}/checkout/success?gateway=free` });
+    // ──────────────────────────────────────────────────────────────────────────
   } catch (err) {
     console.log(err);
     res.json({
@@ -501,30 +476,30 @@ router.post("/razorpay/create-order", userValidator, async (req, res) => {
       return res.json({ success: false, msg: "Plan not found" });
     const plan = plans[0];
 
-    const { instance, rz_id } = await getRazorpayInstance();
-    const { symbol, code, rate } = await getCurrency(); // ← currency
+    // ── BYPASS PAYMENT (Payment Turned Off) ──────────────────────────────────
+    const result = await updateUserPlan({ planId: plan_id, uid });
+    if (!result.success) {
+      return res.json({ success: false, msg: result.msg });
+    }
 
-    const order = await instance.orders.create({
-      amount: toSmallestUnit(plan.price, rate, code), // ← converted
-      currency: code.toUpperCase(), // ← dynamic
-      receipt: `receipt_${uid}_${plan_id}_${Date.now()}`,
-      notes: {
-        plan_id: String(plan.id),
-        uid: String(uid),
-      },
-    });
+    // record the order
+    await query(
+      `INSERT INTO orders (uid, plan_id, amount, gateway, meta, status, created_at)
+       VALUES (?, ?, ?, 'bypass', ?, 'paid', NOW())`,
+      [
+        uid,
+        plan_id,
+        0,
+        JSON.stringify({
+          type: "bypass",
+          order_id: `BYPASS_${uid}_${Date.now()}`,
+        }),
+      ],
+    );
 
-    res.json({
-      success: true,
-      orderId: order.id,
-      amount: order.amount,
-      currency: order.currency,
-      keyId: rz_id,
-      plan: {
-        title: plan.title,
-        description: `${plan.credits} credits · ${plan.expiry_days} days`,
-      },
-    });
+    const appUrl = process.env.APP_URL || "http://localhost:3000";
+    return res.json({ success: true, url: `${appUrl}/checkout/success?gateway=free` });
+    // ──────────────────────────────────────────────────────────────────────────
   } catch (err) {
     console.log(err);
     res.json({
@@ -637,48 +612,30 @@ router.post("/paystack/create-order", userValidator, async (req, res) => {
       return res.json({ success: false, msg: "User not found" });
     const user = users[0];
 
-    const { secretKey, publicKey } = await getPaystackKeys();
-    const { symbol, code, rate } = await getCurrency(); // ← currency
-    const appUrl = process.env.APP_URL || "http://localhost:3000";
-    const reference = `pstk_${uid}_${plan_id}_${Date.now()}`;
-
-    const paystackRes = await fetch(
-      "https://api.paystack.co/transaction/initialize",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${secretKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: user.email,
-          amount: toSmallestUnit(plan.price, rate, code), // ← converted
-          currency: code.toUpperCase(), // ← dynamic
-          reference: reference,
-          metadata: {
-            plan_id: String(plan.id),
-            uid: String(uid),
-            plan_title: plan.title,
-          },
-          callback_url: `${appUrl}/checkout/success?gateway=paystack`,
-        }),
-      },
-    );
-
-    const paystackData = await paystackRes.json();
-    if (!paystackData.status) {
-      return res.json({
-        success: false,
-        msg: paystackData.message || "Paystack init failed",
-      });
+    // ── BYPASS PAYMENT (Payment Turned Off) ──────────────────────────────────
+    const result = await updateUserPlan({ planId: plan_id, uid });
+    if (!result.success) {
+      return res.json({ success: false, msg: result.msg });
     }
 
-    res.json({
-      success: true,
-      url: paystackData.data.authorization_url,
-      reference: reference,
-      publicKey: publicKey,
-    });
+    // record the order
+    await query(
+      `INSERT INTO orders (uid, plan_id, amount, gateway, meta, status, created_at)
+       VALUES (?, ?, ?, 'bypass', ?, 'paid', NOW())`,
+      [
+        uid,
+        plan_id,
+        0,
+        JSON.stringify({
+          type: "bypass",
+          order_id: `BYPASS_${uid}_${Date.now()}`,
+        }),
+      ],
+    );
+
+    const appUrl = process.env.APP_URL || "http://localhost:3000";
+    return res.json({ success: true, url: `${appUrl}/checkout/success?gateway=free` });
+    // ──────────────────────────────────────────────────────────────────────────
   } catch (err) {
     console.log(err);
     res.json({
@@ -802,45 +759,30 @@ router.post("/mercadopago/create-order", userValidator, async (req, res) => {
       return res.json({ success: false, msg: "User not found" });
     const user = users[0];
 
-    const client = await getMercadoPagoClient();
-    const { symbol, code, rate } = await getCurrency(); // ← currency
+    // ── BYPASS PAYMENT (Payment Turned Off) ──────────────────────────────────
+    const result = await updateUserPlan({ planId: plan_id, uid });
+    if (!result.success) {
+      return res.json({ success: false, msg: result.msg });
+    }
+
+    // record the order
+    await query(
+      `INSERT INTO orders (uid, plan_id, amount, gateway, meta, status, created_at)
+       VALUES (?, ?, ?, 'bypass', ?, 'paid', NOW())`,
+      [
+        uid,
+        plan_id,
+        0,
+        JSON.stringify({
+          type: "bypass",
+          order_id: `BYPASS_${uid}_${Date.now()}`,
+        }),
+      ],
+    );
+
     const appUrl = process.env.APP_URL || "http://localhost:3000";
-    const preference = new Preference(client);
-
-    const localAmount = toLocalAmount(plan.price, rate);
-
-    const response = await preference.create({
-      body: {
-        items: [
-          {
-            id: String(plan.id),
-            title: plan.title,
-            description: `${plan.credits} credits · ${plan.expiry_days} days`,
-            quantity: 1,
-            unit_price: localAmount, // ← converted
-            currency_id: code.toUpperCase(), // ← dynamic
-          },
-        ],
-        payer: { email: user.email },
-        metadata: {
-          plan_id: String(plan.id),
-          uid: String(uid),
-        },
-        external_reference: `mp_${uid}_${plan_id}_${Date.now()}`,
-        back_urls: {
-          success: `${appUrl}/checkout/success?gateway=mercadopago`,
-          failure: `${appUrl}/checkout/${plan_id}?cancelled=true`,
-          pending: `${appUrl}/checkout/success?gateway=mercadopago&pending=true`,
-        },
-        auto_return: "approved",
-      },
-    });
-
-    res.json({
-      success: true,
-      url: response.init_point,
-      preferenceId: response.id,
-    });
+    return res.json({ success: true, url: `${appUrl}/checkout/success?gateway=free` });
+    // ──────────────────────────────────────────────────────────────────────────
   } catch (err) {
     console.log(err);
     res.json({
@@ -940,20 +882,6 @@ router.post("/get_free_trial", userValidator, async (req, res) => {
     const [plan] = await query(`SELECT * FROM plan WHERE id = ?`, [id]);
     if (!plan) {
       return res.json({ success: false, msg: "Invalid plan id found" });
-    }
-
-    if (parseInt(plan?.price) > 0) {
-      return res.json({
-        success: false,
-        msg: "This plan is not on Free Trial",
-      });
-    }
-
-    if (parseInt(req.decode?.user?.trial_used) > 0) {
-      return res.json({
-        success: false,
-        msg: "You already have used the Trial. Please buy a plan now.",
-      });
     }
 
     // ── activate plan ─────────────────────────────────────────────────────
