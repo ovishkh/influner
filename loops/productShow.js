@@ -75,16 +75,49 @@ async function notifyUser(user, { task, des, status }) {
   }
 }
 
-// ── Upload local file to kie.ai and get public URL ────────────
-async function uploadFileToProvider(localPath, apiKey) {
+// ── Upload local file and return a public URL ─────────────────
+async function uploadFileToProvider(localPath, provider, apiKey) {
   if (localPath.startsWith("http")) return localPath;
 
   console.log(`📤 Uploading file: ${localPath}`);
 
   const fileBuffer = fs.readFileSync(localPath);
-  const base64 = fileBuffer.toString("base64");
-
   const ext = path.extname(localPath).toLowerCase();
+
+  const isAtlas =
+    String(provider?.provider_key || "").includes("atlas") ||
+    String(provider?.txt2img_base_url || "").includes("atlascloud.ai") ||
+    String(provider?.img2img_base_url || "").includes("atlascloud.ai") ||
+    String(provider?.reel_base_url || "").includes("atlascloud.ai") ||
+    String(provider?.showcase_base_url || "").includes("atlascloud.ai");
+
+  if (isAtlas) {
+    const form = new FormData();
+    form.append("file", new Blob([fileBuffer]), path.basename(localPath));
+
+    const res = await fetch("https://api.atlascloud.ai/api/v1/model/uploadMedia", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${apiKey}` },
+      body: form,
+    });
+
+    const data = await res.json().catch(() => ({}));
+    const url = data?.url || data?.data?.url;
+
+    if (!res.ok || !url) {
+      throw new Error(
+        data?.message ||
+          data?.msg ||
+          data?.error ||
+          `Upload failed (HTTP ${res.status})`,
+      );
+    }
+
+    return url;
+  }
+
+  // Fallback: Kie.ai base64 upload (legacy)
+  const base64 = fileBuffer.toString("base64");
   let mime = "image/jpeg";
   if (ext === ".png") mime = "image/png";
   if (ext === ".webp") mime = "image/webp";
@@ -359,7 +392,7 @@ async function processProductShowcase(item, provider, fee) {
   let modelImageUrl;
   try {
     const modelImagePath = `${__dirname}/../client/public/media/${influencer.photo_url}`;
-    modelImageUrl = await uploadFileToProvider(modelImagePath, apiKey);
+    modelImageUrl = await uploadFileToProvider(modelImagePath, provider, apiKey);
     console.log(`📎 product_content #${id} model image URL: ${modelImageUrl}`);
   } catch (err) {
     await setContentError(id, `Model image upload failed: ${err.message}`);
@@ -376,7 +409,11 @@ async function processProductShowcase(item, provider, fee) {
   let productImageUrl;
   try {
     const productImagePath = `${__dirname}/../client/public/media/${ref_photo}`;
-    productImageUrl = await uploadFileToProvider(productImagePath, apiKey);
+    productImageUrl = await uploadFileToProvider(
+      productImagePath,
+      provider,
+      apiKey,
+    );
     console.log(
       `📎 product_content #${id} product image URL: ${productImageUrl}`,
     );

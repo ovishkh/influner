@@ -76,17 +76,47 @@ async function notifyUser(user, { task, des, status }) {
   }
 }
 
-// ── Upload local image to kie.ai and get public URL ───────────
-async function uploadImageToProvider(localPath, apiKey) {
+// ── Upload local image and return a public URL ────────────────
+async function uploadImageToProvider(localPath, provider, apiKey) {
   // Already a public URL — no upload needed
   if (localPath.startsWith("http")) return localPath;
 
   console.log(`📤 Uploading image: ${localPath}`);
 
   const fileBuffer = fs.readFileSync(localPath);
-  const base64 = fileBuffer.toString("base64");
-
   const ext = path.extname(localPath).toLowerCase();
+  const isAtlas =
+    String(provider?.provider_key || "").includes("atlas") ||
+    String(provider?.txt2img_base_url || "").includes("atlascloud.ai") ||
+    String(provider?.img2img_base_url || "").includes("atlascloud.ai");
+
+  if (isAtlas) {
+    const form = new FormData();
+    form.append("file", new Blob([fileBuffer]), path.basename(localPath));
+
+    const res = await fetch("https://api.atlascloud.ai/api/v1/model/uploadMedia", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${apiKey}` },
+      body: form,
+    });
+
+    const data = await res.json().catch(() => ({}));
+    const url = data?.url || data?.data?.url;
+
+    if (!res.ok || !url) {
+      throw new Error(
+        data?.message ||
+          data?.msg ||
+          data?.error ||
+          `Upload failed (HTTP ${res.status})`,
+      );
+    }
+
+    return url;
+  }
+
+  // Fallback: Kie.ai base64 upload (legacy)
+  const base64 = fileBuffer.toString("base64");
   let mime = "image/jpeg";
   if (ext === ".png") mime = "image/png";
   if (ext === ".webp") mime = "image/webp";
@@ -332,7 +362,7 @@ async function processVariation(item, provider, fee) {
   try {
     const localPath = `${__dirname}/../client/public/media/${influencer.photo_url}`;
     const apiKey = provider.img2img_api_key || provider.txt2img_api_key;
-    referenceUrl = await uploadImageToProvider(localPath, apiKey);
+    referenceUrl = await uploadImageToProvider(localPath, provider, apiKey);
     console.log(`📎 gallery #${id} reference URL: ${referenceUrl}`);
   } catch (err) {
     await setGalleryError(id, `Image upload failed: ${err.message}`);
