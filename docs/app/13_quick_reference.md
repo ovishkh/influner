@@ -4,7 +4,7 @@
 
 ## Quick Reference
 
-A handy summary of the most important URLs, paths, and resources for your AI Influencer installation.
+A handy summary of the most important URLs, paths, and resources for your Influner.com installation.
 
 Resource
 
@@ -56,7 +56,7 @@ Direct support chat
 
 **Node.js Version**
 
-`v18+`
+`v20+`
 
 LTS recommended
 

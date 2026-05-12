@@ -14,7 +14,7 @@ Latest
 
 #### 🚀 Initial Release
 
-First public release of AI Influencer on Envato CodeCanyon.
+First public release of Influner.com on Envato CodeCanyon.
 
 #### 🎬 AI Reel Generator
 

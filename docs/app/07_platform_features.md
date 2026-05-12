@@ -6,7 +6,7 @@
 
 ## Platform Features
 
-AI Influencer is packed with everything a modern AI content SaaS needs — from content generation to monetization and beyond.
+Influner.com is packed with everything a modern AI content SaaS needs — from content generation to monetization and beyond.
 
 * * *
 
@@ -22,7 +22,7 @@ Design fully custom AI personas — choose any appearance, ethnicity, or style. 
 
 Upload a product photo and let the AI place it in any scene, any style, any world. Perfect for e-commerce brands looking to generate stunning product visuals without expensive photoshoots.
 
-🎭 AI Influencer Studio
+🎭 Influner.com Studio
 
 Create a virtual influencer persona that generates viral dance reels, trending content, and social-ready videos on demand. Built for Instagram, TikTok, and YouTube Shorts with auto-optimization per platform.
 

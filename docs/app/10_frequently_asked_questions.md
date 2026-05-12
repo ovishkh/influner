@@ -16,7 +16,7 @@ No. You do not need to manually create or edit any `.env` file. All environment 
 
 📦 What hosting panels are supported?
 
-Any hosting panel that supports Node.js application creation. This includes **cPanel**, **aaPanel**, and any VPS/server with Node.js 18+ installed. Video tutorials are provided for both cPanel and aaPanel.
+Any hosting panel that supports Node.js application creation. This includes **cPanel**, **aaPanel**, and any VPS/server with Node.js 20+ installed. Video tutorials are provided for both cPanel and aaPanel.
 
 💳 Which payment gateways are supported?
 
@@ -36,7 +36,7 @@ Yes. The `/setup` route is automatically locked and disabled after the first suc
 
 📱 Which social platforms is the content optimized for?
 
-AI Influencer auto-optimizes content output for **Instagram**, **TikTok**, and **YouTube Shorts**. Each platform's aspect ratio, duration, and format requirements are handled automatically.
+Influner.com auto-optimizes content output for **Instagram**, **TikTok**, and **YouTube Shorts**. Each platform's aspect ratio, duration, and format requirements are handled automatically.
 
 🎨 Can I white-label or rebrand the platform?
 

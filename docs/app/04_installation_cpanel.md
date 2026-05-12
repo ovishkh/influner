@@ -6,7 +6,7 @@
 
 ## Installation — cPanel
 
-Follow this step-by-step guide to deploy AI Influencer on a cPanel hosting environment. A full video walkthrough is also available below.
+Follow this step-by-step guide to deploy Influner.com on a cPanel hosting environment. A full video walkthrough is also available below.
 
 [
 
@@ -30,7 +30,7 @@ Log in to cPanel and navigate to **File Manager**. Upload the extracted applicat
 
 #### Create a Node.js App
 
-In cPanel, go to **Software → Setup Node.js App**. Click _Create Application_, select your Node.js version (18+), set the application root to your uploaded folder, and set the startup file to `server.js` (or as specified in your package).
+In cPanel, go to **Software → Setup Node.js App**. Click _Create Application_, select your Node.js version (20+), set the application root to your uploaded folder, and set the startup file to `server.js` (or as specified in your package).
 
 3
 

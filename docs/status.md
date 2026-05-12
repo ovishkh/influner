@@ -1,6 +1,6 @@
 # Significant Next Steps
 
-Now that Influner is successfully deployed and secured with SSL, here are the most critical next steps to fully configure and launch the platform:
+Now that Influner.com is successfully deployed and secured with SSL, here are the most critical next steps to fully configure and launch the platform:
 
 ## 1. Initial Application Setup
 - **Access the Setup Wizard**: Navigate to `https://influner.com/setup` in your browser.
@@ -37,7 +37,7 @@ Now that Influner is successfully deployed and secured with SSL, here are the mo
 
 ## 6. Testing & Quality Assurance
 - **End-to-End Testing**: Create a regular user account and walk through the entire flow:
-  - Generate an AI Influencer.
+  - Generate an influencer.
   - Create a Reel or Product Showcase.
   - Test the payment gateway (in Sandbox mode first).
 - **Monitor Usage Logs**: Keep an eye on the `usage_log` table or admin dashboard to track credit consumption and ensure jobs are processing successfully.

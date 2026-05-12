@@ -1,10 +1,10 @@
-# Influner AI
+# Influner.com
 
-Influner AI is a comprehensive AI-powered platform for generating and managing virtual influencers, photo galleries, and video content (reels and product showcases). It provides a full-stack SaaS ecosystem with a seamless user experience, credit-based subscription plans, and an advanced administrative dashboard.
+Influner.com is a comprehensive AI-powered platform for generating and managing virtual influencers, photo galleries, and video content (reels and product showcases). It provides a full-stack SaaS ecosystem with a seamless user experience, credit-based subscription plans, and an advanced administrative dashboard.
 
 ## 🌟 Key Features
 
-### 🤖 AI Influencer Generation
+### 🤖 Influencer Generation
 - **Text-to-Image (Influencer Maker)**: Generate highly realistic, consistent virtual influencers using state-of-the-art models (e.g., Flux-2 Pro).
 - **Image-to-Image (Gallery)**: Create variations and new lifestyle photos based on an existing AI influencer.
 

@@ -6,13 +6,13 @@
 
 ## Live Demo
 
-Watch the full platform walkthrough below to get a complete picture of the AI Influencer experience — from reel generation to admin management.
+Watch the full platform walkthrough below to get a complete picture of the Influner.com experience — from reel generation to admin management.
 
 [
 
 ▶
 
-### AI Influencer – Platform Demo
+### Influner.com – Platform Demo
 
 Click to watch on YouTube
 

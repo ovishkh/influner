@@ -142,7 +142,7 @@ router.get("/", (req, res) => {
     <!DOCTYPE html>
     <html lang="en">
     <head>
-      <title>Setup — AI Influencer</title>
+      <title>Setup — Influner.com</title>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <style>
@@ -387,7 +387,7 @@ router.get("/", (req, res) => {
       <div class="card">
 
         <div class="header">
-          <div class="logo">AI</div>
+          <div class="logo">IN</div>
           <h1>Setup</h1>
           <p>Configure your app to get started</p>
         </div>

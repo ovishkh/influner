@@ -6,7 +6,7 @@
 
 ## Introduction
 
-Welcome to **AI Influencer** — a fully-featured SaaS platform that empowers creators, brands, and agencies to generate hyperreal AI-powered reels, product videos, and influencer content from a single text prompt. No editing skills. No camera crew. No limits.
+Welcome to **Influner.com** — a fully-featured SaaS platform that empowers creators, brands, and agencies to generate hyperreal AI-powered reels, product videos, and influencer content from a single text prompt. No editing skills. No camera crew. No limits.
 
 > **Note:**
 > 🎉

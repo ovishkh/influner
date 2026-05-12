@@ -16,7 +16,7 @@ Notes
 
 **Node.js**
 
-v18+
+v20+
 
 LTS recommended. Available on cPanel & aaPanel.
 

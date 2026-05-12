@@ -6,7 +6,7 @@
 
 ## App Installer ( /setup )
 
-AI Influencer ships with a powerful built-in installer that eliminates all manual configuration. Once your Node.js app is running, simply visit the `/setup` route to get started.
+Influner.com ships with a powerful built-in installer that eliminates all manual configuration. Once your Node.js app is running, simply visit the `/setup` route to get started.
 
 🌐 Installer URL
 
